@@ -132,9 +132,9 @@
 % #4 - Range
 % #5 - Components
 % #6 - Duration
-\NewDocumentCommand {\DndSpellHeader} { m m m m m m }
+\NewDocumentCommand {\DndSpellHeader} { o m m m m m m }
   {
-    \DndItemHeader {#1} {#2}
+    \DndItemHeader {#2} {#3}
 
     \begin{description}
       [
@@ -142,10 +142,12 @@
         labelsep = \l__dnd_space_dim,
         after    = { \vspace{4pt plus 1pt minus 1pt} },
       ]
-      \item [ \spellcastingtimename : ] #3
-      \item [ \spellrangename       : ] #4
-      \item [ \spellcomponentsname  : ] #5
-      \item [ \spelldurationname    : ] #6
+      \item [ \spellcastingtimename : ] #4
+      \item [ \spellrangename       : ] #5
+      \tl_if_novalue:nF {#1}
+        { \item [ \spellcostname : ] #1 }
+      \item [ \spellcomponentsname  : ] #6
+      \item [ \spelldurationname    : ] #7
     \end{description}
   }
 

@@ -29,6 +29,7 @@
 \newcommand\armorclassname{Armor~Class}
 \newcommand\hitpointsname{Hit~Points}
 \newcommand\speedname{Speed}
+\newcommand\sanityname{Sanity}
 
 % Ability Scores
 \newcommand\strstatname{STR}
@@ -37,6 +38,14 @@
 \newcommand\intstatname{INT}
 \newcommand\wisstatname{WIS}
 \newcommand\chastatname{CHA}
+\newcommand\sanstatname{SAN}
+
+\newcommand\printabscore[2]
+  {
+    $#1$\,
+    \cs_if_exist_use:c { \str_lowercase:n {#2} statname }
+  }
+\newcommand\SAN[1]{ \printabscore{#1}{SAN} }
 
 % Details
 \newcommand\skillsname{Skills}
@@ -96,6 +105,7 @@
 \newcommand\spellrangename{Range}
 \newcommand\spellcomponentsname{Components}
 \newcommand\spelldurationname{Duration}
+\newcommand\spellcostname{Cost}
 
 % Miscellaneous
 \newcommand\pageabbreviationname{pg.}
