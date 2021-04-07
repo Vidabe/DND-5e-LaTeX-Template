@@ -72,3 +72,18 @@
         { \msg_error:nnnn { dnd } { key_required } { #2 } { #3 } }
     \group_end:
   }
+  
+  
+  
+  
+%%%%%%%%
+
+% A description with some notes.
+\newlist {Notizen} {description} {1}
+\setlist [Notizen]
+  {
+    font     =  \color {todoblue} ,
+    labelsep = \l__dnd_space_dim,
+    nosep,
+  }
+  
