@@ -1,0 +1,30 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Addons written by me.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%
+
+% A description with some notes.
+\newlist {Notizen} {description} {1}
+\setlist [Notizen]
+  {
+    font     =  \color {todoblue} ,
+    labelsep = \l__dnd_space_dim,
+    nosep,
+  }
+  
+\NewDocumentCommand \Notiz { m }
+  {
+    \textcolor{todoblue} {#1}
+  }
+  
+% A note for me to remember from which book I had the info
+\NewDocumentCommand \seedndbook { o m }
+  {
+    \texttt{
+    [ #2\IfNoValueF {#1} { $\to$ p.#1 } ]
+    }
+  }
+  
