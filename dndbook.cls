@@ -6,6 +6,6 @@
 
 \input {dndoptions.clo}
 
-\LoadClass {book}
+\LoadClass [a4paper] {book}
 
 \input {dndcore.def}

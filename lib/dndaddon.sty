@@ -6,6 +6,12 @@
 
 %%%%%%%%
 
+\RequirePackage{ulem}
+
+% ToDo colors
+\definecolor {todoblue} {HTML} {003066} % ToDo titles
+
+
 % A description with some notes.
 \newlist {Notizen} {description} {1}
 \setlist [Notizen]
@@ -13,6 +19,12 @@
     font     =  \color {todoblue} ,
     labelsep = \l__dnd_space_dim,
     nosep,
+  }
+\NewDocumentCommand \nopeitem { o }
+  {
+    \IfNoValueTF {#1}
+      { \item }
+      { \item[\sout{#1}] }
   }
   
 \NewDocumentCommand \Notiz { m }
@@ -23,8 +35,8 @@
 % A note for me to remember from which book I had the info
 \NewDocumentCommand \seedndbook { o m }
   {
-    \texttt{
-    [ #2\IfNoValueF {#1} { $\to$ p.#1 } ]
-    }
+    \texttt{ [ #2\IfNoValueF {#1} { $\to$ p.#1 } ] }
   }
+  
+  
   
