@@ -6,7 +6,6 @@
 
 %%%%%%%%
 
-\RequirePackage{ulem}
 
 % ToDo colors
 \definecolor {todoblue} {HTML} {003066} % ToDo titles
@@ -31,11 +30,15 @@
   {
     \textcolor{todoblue} {#1}
   }
+\NewDocumentCommand \Nopetiz { m }
+  {
+    \Notiz { \sout{#1} }
+  }
   
 % A note for me to remember from which book I had the info
 \NewDocumentCommand \seedndbook { o m }
   {
-    \texttt{ [ #2\IfNoValueF {#1} { $\to$ p.#1 } ] }
+    \texttt{ [ #2\IfNoValueF {#1} { ~ $\to$ ~ p.#1 } ] }
   }
   
   

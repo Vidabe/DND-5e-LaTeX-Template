@@ -1,0 +1,197 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Glossary macros written by me
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%
+  
+  
+%\makeglossaries
+\setglossarystyle{tree}
+
+
+\newlength \glstreepeopleindent
+\setlength \glstreepeopleindent {\glstreeindent}
+
+\newcommand \indentforpeople {4}
+\newcommand \glsentrylevelcounter {0}
+
+\newcommand \dnddramiatistitlerule [1] { \makebox [0pt] [l] {#1} \dndrulefill {-0.4ex} }
+\newcommand \dndrulefill [1] 
+  {
+    \leavevmode\leaders\hrule height #1 depth \dimexpr0.4pt-#1\hfill\kern0pt
+  }
+
+\newglossarystyle{citytree}{
+  \setglossarystyle{tree}
+
+  \setlength{\glstreeindent}{0.1pt}
+
+  \let\dnddefaultglossentry\glossentry
+  \let\dnddefaultsubglossentry\subglossentry
+
+  \renewcommand{\glossentry}[2]{%
+    \renewcommand\glsentrylevelcounter{0}
+    \dnddefaultglossentry{##1}{##2}
+  }%
+
+  \renewcommand{\subglossentry}[3]{%
+    \renewcommand\glsentrylevelcounter{##1}
+    \dnddefaultsubglossentry{##1}{##2}{##3}
+  }%
+  
+  \renewcommand\indentforpeople{2}
+  
+  \renewcommand\glstreenamefmt[1]
+    {
+      \ifcase\glsentrylevelcounter\relax % 0
+        \noindent
+        { \DndFontSection ##1 }
+        \vspace{1ex}
+      \or %% 1
+        \vspace*{1.4ex plus .47ex}
+        \noindent
+        { \DndFontSubsection \dnddramiatistitlerule {##1} }
+        \vspace*{1.5ex plus 0.2ex}
+      \or %% 2
+        \textbf{##1}
+      \else 
+        \textbf{##1}
+      \fi
+    }
+}
+
+
+\setglossarystyle{citytree}
+
+
+
+
+
+\NewDocumentCommand \NewRealmEntry { m m }
+  {
+      \seq_new:c { __dnd_realm_cities_ #1 _seq }
+      \newglossaryentry {#1} { name=#1, description={\nopostdesc} }
+  }
+\NewDocumentCommand \NewCityEntry { m m m }
+  {
+    \seq_if_exist:cTF { __dnd_realm_cities_ #1 _seq }
+      {
+          \seq_put_right:cn { __dnd_realm_cities_ #1 _seq } {#2}
+          \newglossaryentry {#2} { name=#2 , description={\nopostdesc} , parent={#1} }
+      }{
+          \ERRORCityEntry
+      }
+    \prop_new:c { __dnd_personae_urbs_ #2 _prop }
+    \seq_new:c { __dnd_personae_urbs_#2_seq } 
+  }
+
+\cs_new:Npn \__dnd_set_par_hangindent_aux:n #1
+  {
+    \setlength \hangindent { #1\glstreepeopleindent + 1.5\glstreepeopleindent}
+    \setlength \parindent { #1\glstreepeopleindent }
+  }
+\newcommand \setparhangindent [1]
+  {
+    \__dnd_set_par_hangindent_aux:n {#1}
+    \everypar { \__dnd_set_par_hangindent_aux:n {#1} }
+  }
+
+
+\NewDocumentCommand \NewPersonEntry { m m m m m }
+  {
+    % #1: Ort
+    % #2: Name
+    % #3: Berufsbezeichnung
+    % #4: Aussehen
+    % #5: Beschreibung
+    \newglossaryentry { #1:#2 }
+      {
+        , name = {#2}
+        , parent = {#1} 
+        , description = 
+            {
+              \setparhangindent { \indentforpeople }
+              \__dnd_print_person_descirption:nnn {#3} {#4} {#5}
+            }
+        , sort = {#1:#2}
+      }
+    \__dnd_add_person_to_city:nnn {#1} {#2} {#3}
+  }
+
+
+\cs_new:Npn \__dnd_print_person_descirption:nnn #1#2#3
+  {
+    \tl_if_blank:nF {#1} { (#1) } \\ 
+    \textit { Aussehen: } \ #2 \\  
+    \textit { Beschreibung: } \ #3 
+  }
+
+\cs_new:Npn \__dnd_add_person_to_city:nnn #1#2#3
+  {
+    \seq_if_in:cnF { __dnd_personae_urbs_#1_seq } {#1:#2}
+      { 
+        \seq_put_right:cn { __dnd_personae_urbs_#1_seq } { \gls {#1:#2} }
+      }
+    \prop_get:cnNF { __dnd_personae_urbs_ #1 _prop } {#3} \l_tmpa_seq
+      { \seq_clear:N \l_tmpa_seq }
+    \seq_put_right:Nn \l_tmpa_seq { \gls {#1:#2} }
+    \prop_put:cnV { __dnd_personae_urbs_ #1 _prop } {#3} \l_tmpa_seq
+  }
+
+
+
+
+
+\seq_new:N \l__dnd_urbs_personae_beruf_order_seq
+\seq_set_from_clist:Nn \l__dnd_urbs_personae_beruf_order_seq
+  {
+      Regierung, Wache, ArbeiterIn, Teenager
+  }
+
+\NewDocumentCommand \UrbsPersonae { s m }
+  {
+    \seq_if_exist:cTF { __dnd_personae_urbs_#2_seq }
+      {  
+        \paragraph{Bewohner}
+        \IfBooleanTF {#1}
+          { \__dnd_urbs_personae_map_through_prop_list:n {#2} }
+          { \seq_use:cn { __dnd_personae_urbs_#2_seq } { , \space } . }
+      }{
+        \ERRORUrbsPeronae
+      }
+  }
+
+\cs_new:Npn \__dnd_urbs_personae_map_through_prop_list:n #1
+  {
+    \prop_set_eq:Nc \l_tmpa_prop { __dnd_personae_urbs_ #1 _prop }
+    \seq_map_inline:Nn \l__dnd_urbs_personae_beruf_order_seq
+      {
+        \prop_pop:NnNT \l_tmpa_prop {##1} \l_tmpa_seq
+          { 
+            \__dnd_urbs_personae_print_order:nN {##1} \l_tmpa_seq 
+          }
+      }
+    \prop_map_function:NN \l_tmpa_prop \__dnd_urbs_personae_print_order:nn
+  }
+
+\cs_new:Npn \__dnd_urbs_personae_print_order:nN #1#2
+  {
+    #1: \ \seq_use:Nn #2 { ,\space } . \\
+  }
+\cs_new:Npn \__dnd_urbs_personae_print_order:nn #1#2
+  {
+    \cs_set:Npn \l_tmpa_seq {#2}
+    \__dnd_urbs_personae_print_order:nN {#1} \l_tmpa_seq
+  }
+
+\NewDocumentCommand \PrintRealmCities { m }
+  {
+      \seq_map_inline:cn { __dnd_realm_cities_ #1 _seq } { \input{Laender/Orte/##1} }
+  }
+
+
+
+
+\ExplSyntaxOff

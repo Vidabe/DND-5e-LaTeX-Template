@@ -50,7 +50,7 @@
 
   \regex_extract_all:NnNTF \c__preamble_regex {#2} \l_tmpa_seq
   {
-    \tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpa_seq {^}}
+    \tl_set:Nx \l_tmpa_tl {\seq_use:Nn \l_tmpa_seq {^}}
     \use:x { \exp_not:n {\tabularx{\l__dnd_table_width_dim}}{`\l_tmpa_tl}}
     \rowstyle{\DndFontTableHeader}
   }

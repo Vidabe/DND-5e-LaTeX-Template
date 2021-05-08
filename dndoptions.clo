@@ -31,9 +31,11 @@
 \bool_new:N \l__dnd_multitoc_bool
 \bool_new:N \l__dnd_layout_bool
 \bool_new:N \l__dnd_no_deprecated_code_bool
+\bool_new:N \l__dnd_microtype_bool
 
 \bool_set_true:N \l__dnd_multitoc_bool
 \bool_set_eq:NN \l__dnd_layout_bool \c__dnd_isclass_bool
+\bool_set_true:N \l__dnd_microtype_bool
 
 % BEGIN section to remove in version 1.0.0
 \bool_set_true:N \l__dnd_layout_bool
@@ -125,6 +127,8 @@
         \bool_set_true:N \l__dnd_show_footer_scroll_bool
       },
     bg-print .value_forbidden:n = true,
+    microtype .bool_set:N = \l__dnd_microtype_bool ,
+    microtype .default:n = { true } ,
   }
 
 \ProcessKeysOptions { dnd / options }

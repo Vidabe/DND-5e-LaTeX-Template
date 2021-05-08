@@ -7,6 +7,7 @@
 % Helps prevent option clash with other packages that include xcolor
 \PassOptionsToPackage {table} {xcolor}
 
+\RequirePackage {setspace}
 \RequirePackage {array}
 \RequirePackage {colortbl}
 \RequirePackage {enumitem}
@@ -16,9 +17,12 @@
 \RequirePackage [autolanguage] {numprint} % localization of thousands separator
 \RequirePackage {tabularx} % variable-width table columns
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
-\RequirePackage {tikz} % drawing ornaments and lines
+%\RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
+\RequirePackage {ulem}
+\RequirePackage {glossaries}
+
 
 \sys_if_engine_luatex:T
   {
@@ -28,7 +32,10 @@
 \bool_if:NT \l__dnd_layout_bool
   {
     \RequirePackage {geometry}
-    \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
+    \bool_if:NT \l__dnd_microtype_bool
+      {
+        \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
+      }
     \RequirePackage {ragged2e}
     \RequirePackage [titles] {tocloft} % multi-column toc
     \RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
@@ -48,7 +55,7 @@
 
     % Set paragraph and line spacing
     \setlength {\parindent}            {1em}
-    \setlength {\RaggedRightRightskip} {0pt plus 1em}
+%    \setlength {\RaggedRightRightskip} {0pt plus 1em}
     \setlength {\RaggedRightParindent} {\parindent}
 
     % Restrict hyphenation
@@ -63,7 +70,7 @@
 
     % Customize itemize environment.
     \setlist{leftmargin=1em}
-    \setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
+    \setitemize{noitemsep, topsep=0.5ex, label=\footnotesize{\textbullet}}
   }
 
 % Load other modules of this package after all dependencies to avoid load order
@@ -89,3 +96,4 @@
 \RequirePackage {lib/dndtable}      % tables
 \RequirePackage {lib/dndtoc}        % table of contents styling
 \RequirePackage {lib/dndaddon}        % new misc addons by me
+\RequirePackage {lib/dndaddglossaries}        % new misc addons by me
