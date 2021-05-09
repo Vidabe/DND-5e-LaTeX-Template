@@ -11,6 +11,14 @@
 \definecolor {todoblue} {HTML} {003066} % ToDo titles
 
 
+\newlist {Notizze} {itemize} {1}
+\setlist [Notizze]
+  {
+    label= \color{todoblue}\textquestiondown ,
+    labelsep = \l__dnd_space_dim,
+    nosep,
+  }
+
 % A description with some notes.
 \newlist {Notizen} {description} {1}
 \setlist [Notizen]
