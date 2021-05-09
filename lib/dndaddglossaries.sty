@@ -11,8 +11,10 @@
 \setglossarystyle{tree}
 
 
-\newlength \glstreepeopleindent
-\setlength \glstreepeopleindent {\glstreeindent}
+
+
+\newlength \dndglstreepeopleindent
+\setlength \dndglstreepeopleindent {\glstreeindent}
 
 \newcommand \indentforpeople {4}
 \newcommand \glsentrylevelcounter {0}
@@ -22,6 +24,18 @@
   {
     \leavevmode\leaders\hrule height #1 depth \dimexpr0.4pt-#1\hfill\kern0pt
   }
+
+\cs_new:Npn \__dnd_set_par_hangindent_aux:n #1
+  {
+    \setlength \hangindent { #1\dndglstreepeopleindent + 1.5\dndglstreepeopleindent}
+    \setlength \parindent { #1\dndglstreepeopleindent }
+  }
+\newcommand \setparhangindent [1]
+  {
+    \__dnd_set_par_hangindent_aux:n {#1}
+    \everypar { \__dnd_set_par_hangindent_aux:n {#1} }
+  }
+
 
 \newglossarystyle{citytree}{
   \setglossarystyle{tree}
@@ -87,16 +101,6 @@
     \seq_new:c { __dnd_personae_urbs_#2_seq } 
   }
 
-\cs_new:Npn \__dnd_set_par_hangindent_aux:n #1
-  {
-    \setlength \hangindent { #1\glstreepeopleindent + 1.5\glstreepeopleindent}
-    \setlength \parindent { #1\glstreepeopleindent }
-  }
-\newcommand \setparhangindent [1]
-  {
-    \__dnd_set_par_hangindent_aux:n {#1}
-    \everypar { \__dnd_set_par_hangindent_aux:n {#1} }
-  }
 
 
 \NewDocumentCommand \NewPersonEntry { m m m m m }
