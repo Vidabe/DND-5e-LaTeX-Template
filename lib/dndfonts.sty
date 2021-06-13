@@ -128,11 +128,28 @@
     sidebar-title-style .value_required:n = true,
     % Sidebar body
     sidebar-body-family .tl_set:N         = \l__dnd_sidebar_body_family_tl,
-    sidebar-body-family .initial:n        = \__dnd_sf_initial_family:,
+    sidebar-body-family .initial:n        = \__dnd_sf_initial_family: ,
     sidebar-body-family .value_required:n = true,
     sidebar-body-style .tl_set:N         = \l__dnd_sidebar_body_style_tl,
     sidebar-body-style .initial:n        = \small,
     sidebar-body-style .value_required:n = true,
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % notepaper
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % notepaper title
+    notepaper-title-family .tl_set:N         = \l__dnd_notepaper_title_family_tl,
+    notepaper-title-family .initial:n        = \sffamily,
+    notepaper-title-family .value_required:n = true,
+    notepaper-title-style .tl_set:N         = \l__dnd_notepaper_title_style_tl,
+    notepaper-title-style .initial:n        = \bfseries \scshape,
+    notepaper-title-style .value_required:n = true,
+    % notepaper body
+    notepaper-body-family .tl_set:N         = \l__dnd_notepaper_body_family_tl,
+    notepaper-body-family .initial:n        = \__dnd_sf_initial_family: \itshape,
+    notepaper-body-family .value_required:n = true,
+    notepaper-body-style .tl_set:N         = \l__dnd_notepaper_body_style_tl,
+    notepaper-body-style .initial:n        = \small,
+    notepaper-body-style .value_required:n = true,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Read-aloud boxes
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -268,6 +285,13 @@
 
 \NewDocumentCommand{\DndFontSidebarBody}{}
   { \l__dnd_sidebar_body_family_tl \l__dnd_sidebar_body_style_tl }
+
+% Notepaper
+\NewDocumentCommand{\DndFontNotepaperTitle}{}
+  { \l__dnd_notepaper_title_family_tl \l__dnd_notepaper_title_style_tl }
+
+\NewDocumentCommand{\DndFontNotepaperBody}{}
+  { \l__dnd_notepaper_body_family_tl \l__dnd_notepaper_body_style_tl }
 
 % Read-aloud boxes
 \NewDocumentCommand{\DndFontReadAloud}{}

@@ -1,0 +1,140 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Notepaper macros written by me
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%
+  
+%% https://tex.stackexchange.com/questions/580671/torn-paper-effect-on-a-tcolorbox
+
+\ExplSyntaxOff
+\usetikzlibrary{decorations.pathmorphing,shadows.blur,shadings}
+\ExplSyntaxOn
+
+\tl_const:Nn \c__dnd_notepaper_path_tl { img / notepaper }
+
+%% use hbox as with vbox the width will be \textwidth
+\hbox_set:Nn \l_tmpa_box { \includegraphics { \c__dnd_notepaper_path_tl } }
+
+\dim_const:Nn \c__dnd_notepaper_width_dim { \box_wd:N \l_tmpa_box }
+\dim_const:Nn \c__dnd_notepaper_hight_dim { \box_ht:N \l_tmpa_box }
+
+
+\tl_new:N \l__dnd_notepaper_opacity_tl
+\tl_new:N \l__dnd_notepaper_color_tl
+
+\tl_set:Nn \l__dnd_notepaper_opacity_tl { 0.05 }
+\tl_set:Nn \l__dnd_notepaper_color_tl { white }
+
+\cs_new:Npn \__dnd_get_correct_notepaper_dimensions:NN #1#2
+  {
+    \dim_set:Nn #1 { \tcbtextheight + 2cm }
+    \dim_compare:nNnTF { \tcbtextwidth + 2cm } < { \linewidth }
+      { \dim_set:Nn #2 { \linewidth } }
+      { \dim_set:Nn #2 { \tcbtextwidth + 2cm } }
+  }
+
+% Define paper style
+\tikzset{
+  dnd_notepaper / .style = 
+    {%
+      , draw=none
+      , blur ~ shadow
+      , path ~ picture=
+        {%
+          \__dnd_get_correct_notepaper_dimensions:NN 
+            \l_tmpa_dim \l_tmpb_dim
+          \node at (path ~ picture ~ bounding ~ box.center) 
+            { 
+              \includegraphics 
+                [ width= \l_tmpb_dim, height=\l_tmpa_dim ] 
+                { \c__dnd_notepaper_path_tl } 
+            };
+          \node [ opacity = \l__dnd_notepaper_opacity_tl ] 
+            at (path ~ picture ~ bounding ~ box.center) 
+            {
+              \color { \l__dnd_notepaper_color_tl }
+              \rule { \l_tmpb_dim } { \l_tmpa_dim } 
+            };
+        }
+    }
+}
+
+\newtcolorbox{ __dnd_notepaper_box }[1][]{%
+  , empty % Better use this rendering engine to avoid the bug
+  , overlay=
+    {%
+      \draw[ dnd_notepaper , decorate,
+        decoration = {random ~ steps , segment ~ length=10pt , amplitude=2pt}
+       ] 
+          (interior.south ~ east) 
+          -- (interior.south ~ west)
+          -- (interior.north ~ west) 
+          -- (interior.north ~ east) 
+          -- cycle
+          ;
+    }
+  , breakable
+  , fonttitle        = \DndFontNotepaperTitle,
+  , fontupper        = \DndFontNotepaperBody,
+  , fontlower        = \DndFontNotepaperBody,
+  , fuzzy~shadow     = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {black!60!white},
+  , after~skip       = 14pt plus 4pt minus 4pt,
+  , before~skip      = 13pt plus 4pt minus 4pt
+  , parbox           = false
+  , code = 
+    { 
+      \setlength \parskip {.25\baselineskip \@plus .25\baselineskip} 
+      \setlength \parindent { 0pt }
+    }
+  , #1
+}
+
+% Extra key for controlling the color of the title and the background
+\keys_define:nn { dnd / notepaper }
+  {
+    color .tl_set:N         = \l__dnd_notepaper_color_tl,
+    color .initial:n        = white ,
+    color .value_required:n = true,
+    opacity .tl_set:N         = \l__dnd_notepaper_opacity_tl ,
+    opacity .initial:n        = 0.1 ,
+    opacity .value_required:n = true,
+  }
+
+
+
+
+\cs_new:Npn \__dnd_start_notepaper_environment:n #1
+  {
+    \begin{__dnd_notepaper_box} [#1]
+  }
+\cs_generate_variant:Nn \__dnd_start_notepaper_environment:n { V }
+
+\NewDocumentEnvironment { Dndnote } { O{} }
+  {
+    \keys_set_known:nnN { dnd/notepaper } {#1} \l_tmpa_tl
+    \__dnd_start_notepaper_environment:V \l_tmpa_tl
+  }{
+    \end{__dnd_notepaper_box}
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\ExplSyntaxOff

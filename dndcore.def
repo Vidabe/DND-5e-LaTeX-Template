@@ -97,3 +97,4 @@
 \RequirePackage {lib/dndtoc}        % table of contents styling
 \RequirePackage {lib/dndaddon}        % new misc addons by me
 \RequirePackage {lib/dndaddglossaries}        % new misc addons by me
+\RequirePackage {lib/dndaddnotepaper}        % new misc addons by me
