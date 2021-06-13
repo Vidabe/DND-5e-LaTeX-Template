@@ -47,7 +47,7 @@
 % Monster environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Stat block made to look like the Monster Manual NPC definitions
-\DeclareTColorBox {DndMonsterNoBg} { O{} m }
+\DeclareTColorBox {DndMonsterNoBg} { >{\__dnd_monster_expand_once:n} O{} m }
   {
     enhanced,
     frame~hidden,
@@ -70,7 +70,7 @@
   }
 
 % Stat block made to look like stat blocks in the PHB.
-\DeclareTColorBox {DndMonsterBg} { O{} m }
+\DeclareTColorBox {DndMonsterBg} { >{\__dnd_monster_expand_once:n}O{} m }
   {
     enhanced,
     frame~hidden,
@@ -104,12 +104,49 @@
 % Alias DndMonster to correct background type
 \bool_if:NTF \l__dnd_show_background_bool
   {
-    \let\DndMonster\DndMonsterBg
-    \let\endDndMonster\endDndMonsterBg
+    \let\DndMonsterUse\DndMonsterBg
+    \let\endDndMonsterUse\endDndMonsterBg
   }{
-    \let\DndMonster\DndMonsterNoBg
-    \let\endDndMonster\endDndMonsterNoBg
+    \let\DndMonsterUse\DndMonsterNoBg
+    \let\endDndMonsterUse\endDndMonsterNoBg
   }
+
+\cs_new:Npn \__dnd_monster_expand_once:n #1
+  {
+    \tl_set:No \ProcessedArgument {#1}
+  }
+
+\int_new:N \l__dnd_monster_columns_int
+\bool_new:N \l__dnd_monster_multicol_bool
+\dim_new:N \l__dnd_monster_width_dim
+\keys_define:nn { dnd/monster }
+  {
+    , cols .int_set:N = \l__dnd_monster_columns_int
+    , cols .default:n = { 1 }
+  }
+
+\NewDocumentEnvironment {DndMonster} { O{} m }
+  {
+    %% initializing
+    \int_set:Nn \l__dnd_monster_columns_int { 1 }
+    \dim_set:Nn \l__dnd_monster_width_dim { \linewidth + 8pt }
+    %% setting
+    \keys_set_known:nnN { dnd/monster } {#1} \l_tmpa_tl
+    \int_compare:nNnF { \l__dnd_monster_columns_int } = { 1 }
+      { 
+        \bool_set_true:N \l__dnd_monster_multicol_bool 
+        \dim_set:Nn \l__dnd_monster_width_dim { \textwidth + 8pt }
+      }
+    %% starting environment
+    \begin{DndMonsterUse}[ \l_tmpa_tl, width=\l__dnd_monster_width_dim ]{#2}
+      \bool_if:NT \l__dnd_monster_multicol_bool
+        { \begin{multicols}{\l__dnd_monster_columns_int} }
+  }{
+      \bool_if:NT \l__dnd_monster_multicol_bool
+        { \end{multicols} }
+    \end{DndMonsterUse}
+  }
+
 
 % Italicized text appearing immediately after monster's name
 \NewDocumentCommand {\DndMonsterType} {m}
