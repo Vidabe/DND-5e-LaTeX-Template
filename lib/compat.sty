@@ -12,3 +12,10 @@
     %   https://github.com/latex3/latex3/blob/8fcb571ddda61c01773d9746d32cecdbe63afb26/l3kernel/l3obsolete.txt#L65
     \cs_new_eq:NN \str_case_e:nnF \str_case_x:nnF
   }
+
+
+
+\cs_new:Npn \__dnd_base_expand_once:n #1
+  {
+    \tl_set:No \ProcessedArgument {#1}
+  }

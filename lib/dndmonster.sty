@@ -47,7 +47,7 @@
 % Monster environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Stat block made to look like the Monster Manual NPC definitions
-\DeclareTColorBox {DndMonsterNoBg} { >{\__dnd_monster_expand_once:n} O{} m }
+\DeclareTColorBox {DndMonsterNoBg} { >{\__dnd_base_expand_once:n} O{} m }
   {
     enhanced,
     frame~hidden,
@@ -70,7 +70,7 @@
   }
 
 % Stat block made to look like stat blocks in the PHB.
-\DeclareTColorBox {DndMonsterBg} { >{\__dnd_monster_expand_once:n}O{} m }
+\DeclareTColorBox {DndMonsterBg} { >{\__dnd_base_expand_once:n}O{} m }
   {
     enhanced,
     frame~hidden,
@@ -109,11 +109,6 @@
   }{
     \let\DndMonsterUse\DndMonsterNoBg
     \let\endDndMonsterUse\endDndMonsterNoBg
-  }
-
-\cs_new:Npn \__dnd_monster_expand_once:n #1
-  {
-    \tl_set:No \ProcessedArgument {#1}
   }
 
 \int_new:N \l__dnd_monster_columns_int

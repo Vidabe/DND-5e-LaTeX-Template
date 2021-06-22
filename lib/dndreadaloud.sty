@@ -4,7 +4,7 @@
 % Environment for read-aloud text.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Standard for every read-aloud text
-\DeclareTColorBox {__dnd_read_aloud} {o}
+\DeclareTColorBox {__dnd_read_aloud} { > { \__dnd_base_expand_once:n } o }
   {
     before~upper    =
       {
@@ -14,7 +14,7 @@
               {\RaggedRight}
           }
       },
-    code            = {\setstretch {1.1} },
+    code            = { \setstretch {1.1} },
     enhanced~jigsaw,
     frame~hidden,
     boxrule         = 0pt,
@@ -49,14 +49,14 @@
     color .value_required:n = true,
   }
 
-% This function, through its variant, forces the expansion of the tcb keys
-% passed to the environment by the user before it invokes the tcolorbox
-\cs_new_protected:Nn \__dnd_start_read_aloud:nn
-  {
-    \begin {__dnd_read_aloud} [ #1, #2 ]
-  }
-
-\cs_generate_variant:Nn \__dnd_start_read_aloud:nn { nV }
+%% This function, through its variant, forces the expansion of the tcb keys
+%% passed to the environment by the user before it invokes the tcolorbox
+%\cs_new_protected:Nn \__dnd_start_read_aloud:nn
+%  {
+%    \begin {__dnd_read_aloud} [ #1, #2 ]
+%  }
+%
+%\cs_generate_variant:Nn \__dnd_start_read_aloud:nn { nV }
 
 % The DndReadAloud environment
 % #1 - keys. We handle the custom color key before passing other keys on
@@ -65,13 +65,8 @@
     \group_begin:
     \keys_set_known:nnN { dnd / read_aloud } {#1} \l_tmpa_tl
 
-    \__dnd_start_read_aloud:nV
-      {
-          colback = \l__dnd_read_aloud_color_tl,
-      }
-      \l_tmpa_tl
-  }
-  {
+    \begin {__dnd_read_aloud} [ \l_tmpa_tl , colback = \l__dnd_read_aloud_color_tl ]
+  }{
     \end {__dnd_read_aloud}
     \group_end:
   }
