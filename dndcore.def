@@ -20,7 +20,7 @@
 %\RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
-\RequirePackage {ulem}
+\RequirePackage [normalem] {ulem}
 \RequirePackage {glossaries}
 
 
